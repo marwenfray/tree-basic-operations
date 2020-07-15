@@ -1,0 +1,102 @@
+//number of nodes function
+FUNCTION node_nb(root:^binary) : INTEGER
+
+BEGIN
+    IF (root = NULL) THEN
+        RETURN 0;
+    END_IF
+    ELSE
+        RETURN 1+ node_nb(root^.LC) + node_nb(root^.RC);
+    END_IF
+END
+//tree height function
+FUNCTION tree_h(root : ^binary) : INTEGER
+VAR
+    a,b: INTEGER:=0;
+BEGIN
+    IF (root = NULL) THEN
+        RETURN 0 ;
+    ELSE
+        a:= 1 + tree_h(root^.LC)
+        b:= 1 + tree_h(root^.RC)
+        IF (a>b) THEN
+            RETURN a
+        ELSE
+            RETURN b
+        END_IF
+    END_IF
+END
+//function that gives number of leaves
+FUNCTION leaves(root: ^binary) : INTEGER
+
+BEGIN
+    IF (root= NULL) THEN
+        RETURN 0 ;
+    ELSE_IF (root.^LC = NULL and root.^RC = NULL ) THEN
+        RETURN 1;
+    ELSE
+        RETURN  leaves(root^.LC) + leaves(root^.RC);
+
+    END_IF
+END
+// function that gives the maximum value
+FUNCTION maximum(root: ^binary) : INTEGER
+VAR
+max:INTEGER;
+BEGIN
+    IF (root = NULL) THEN
+        RETURN 0 ; 
+    ELSE
+        max = root^.VAL ;
+        IF (max < root^.LC.VAL) THEN
+            max := root^.LC.VAL ;
+            maximum (max) ;
+        ELSE_IF ( max <root^.RC.VAL) THEN
+            max := root^.RC.VAL ;
+            maximum(max) ; 
+        
+        ELSE
+            RETURN root.VAL
+
+        END_IF
+    END_IF
+END
+//function to test if the tree is a full
+FUNCTION is_full(root:^binary) : STRING
+BEGIN
+    IF (root = NULL) THEN
+        RETURN "the tree is full";
+    ELSE_IF (root^.LC = NULL and root^.RC = NULL) THEN
+        RETURN "the tree is full";
+    ELSE_IF(root^.LC <> NULL and root^RC <> NULL) THEN
+        RETURN is_full(root^.LC) and is_full(root^.RC);
+    ELSE
+       RETURN "the tree isn't full";    
+    END_IF    
+END
+
+
+
+
+
+
+
+ALGORITHM Tree basic operations
+VAR
+    nd,ht,nl,mv: INTEGER;
+    ft:STRING;
+    binary :	STRUCT
+                        VAL : INTEGER;
+                        LC : ^binary;
+                        RC : ^binary;
+                    END_STRUCT
+
+BEGIN
+    root : binary;
+    nd:= node_nb(root);
+    ht:= height(root);
+    nl:= leaves(root);
+    mv:= maximum(root);
+    ft:= is_full(root);
+    Write ("the number of nodes is: " nd ", the height of the tree is: " ht ", the number of leaves is: " nl "the maximum value of the tree is: " mv "and" ft )
+END
